@@ -1,16 +1,19 @@
 <template >
-    <aside class="bg-gray-200 w-1/4 rounded h-[500px] flex flex-col gap-0.5 overflow-auto">
+    <aside class="w-1/4">
         <div class="flex items-center justify-between">
             <h1 class="text-lg px-2">The latest</h1>
-             <RouterLink to="/all-requests" class="text-sm underline text-blue-500 mr-5">View all</RouterLink>
-            </div>
-
-        <RouterLink v-for="request in requests.slice(0,7)" :to="`/request-for-volunteering/${request._id}`" class="bg-gray-100 hover:opacity-70 p-2 flex-1" :class="request.category">
-            <div class="flex items-center">
-                {{request.author}}
-            </div>
-            <span class="text-sm text-white">{{ getNeedsString(request) }}</span>
-        </RouterLink>
+            <RouterLink to="/all-requests" class="text-sm underline text-blue-500 mr-5">View all</RouterLink>
+        </div>
+        <v-list lines="two" class="flex flex-col gap-2 h-[470px] overflow-auto">
+            <RouterLink v-for="request in requests.slice(0,7)" :to="`/request-for-volunteering/${request._id}`" class="hover:opacity-70 flex-1" :class="request.category">
+                <v-list-item  :value="request">
+                        <div class="flex items-center">
+                            {{request.author}}
+                        </div>
+                        <div class="text-sm">{{ getNeedsString(request) }}</div>
+                </v-list-item>
+            </RouterLink>
+        </v-list>
     </aside>
 </template>
 <script setup>
