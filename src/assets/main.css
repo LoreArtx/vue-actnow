@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  font-family: 'Kalam', cursive;
+}
 .all{
     @apply bg-white text-black
 }

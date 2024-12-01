@@ -10,6 +10,12 @@ import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import colors from 'vuetify/util/colors'
 
+// FontSource
+import '@fontsource/kalam/300.css';
+import '@fontsource/kalam/400.css';
+import '@fontsource/kalam/700.css';
+
+// Store
 import useRequests from './stores/volunteer-requests'
 
 import App from './App.vue'
