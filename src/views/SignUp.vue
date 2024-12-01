@@ -3,20 +3,19 @@
         <v-card class="mx-auto px-6 py-8 flex" max-width="344">
             <v-form @submit.prevent="signUp" validate-on="submit lazy">
                 <h1 class="text-center text-2xl mb-2">Welcome</h1>
-                <v-text-field v-model="firstName" :rules="firstNameRules" label="First Name"/>
+                <v-text-field v-model="firstName" :rules="[rules.required]" label="First Name"/>
 
-                <v-text-field v-model="lastName" :rules="lastNameRules" label="Last Name"/>
+                <v-text-field v-model="lastName" :rules="[rules.required]" label="Last Name"/>
 
-                <v-text-field v-model="phoneNumber" :rules="phoneNumberRules" label="Phone Number"/> 
+                <v-text-field v-model="phoneNumber" :rules="[rules.required]" label="Phone Number"/> 
 
-                <v-text-field v-model="password" :rules="passwordRules" type="password" label="Password"/>
+                <v-text-field v-model="password" :rules="[rules.required]" type="password" label="Password"/>
 
-                <v-text-field v-model="confirmPassword" :rules="passwordRules" type="password" label="Confirm Password"/>
+                <v-text-field v-model="confirmPassword" :rules="[rules.required]" type="password" label="Confirm Password"/>
 
-
-                <br/>
+                <RouterLink to="/sign-in" class="text-blue-700 underline block">Already have an account</RouterLink>
+                <br>
                 <v-btn type="submit" color="primary" block>Sign up</v-btn>
-                <RouterLink to="/sign-in" class="text-blue-700 underline mb-3">Already have an account</RouterLink>
             </v-form>
         </v-card>
     </v-sheet>
@@ -24,7 +23,7 @@
 
 <script setup>
     import {ref} from "vue"
-    import { firstNameRules, lastNameRules, phoneNumberRules, passwordRules } from "@/utils/validation/rules";
+    import rules from "@/utils/validation/rules";
     const firstName = ref('')
     const lastName = ref('')
     const phoneNumber = ref('')
