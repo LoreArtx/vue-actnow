@@ -19,19 +19,24 @@
 
             <v-row class="flex-auto items-end">
                 <v-col>
-                    <v-btn color="primary" block>Donate</v-btn>
+                    <v-btn color="primary" block @click="paymentDialog=true">Donate</v-btn>
                 </v-col>
                 <v-col>
                     <v-btn color="secondary" block>Send help</v-btn>
                 </v-col>
             </v-row>
         </v-container>
+
+        <v-dialog v-model="paymentDialog" max-width="500">
+            <PaymentForm/>
+        </v-dialog>
     </div>
 
 </template>
 <script setup>
 import Map from '@/components/GoogleMaps/Map.vue';
+import PaymentForm from '@/components/PaymentForm.vue';
+import {ref} from 'vue'
+
+const paymentDialog = ref(false)
 </script>
-<style>
-    
-</style>
