@@ -1,22 +1,24 @@
 <template>
-    <div class="flex justify-center">
-        <form @submit.prevent="auth" class="bg-gray-200 w-1/3 p-5 flex flex-col gap-5">
-            <h1 class="text-center text-2xl">Welcome Back!</h1>
+        <v-sheet class="pa-12">
+            <v-card class="mx-auto px-6 py-8 flex" max-width="344">
+                <v-form validate-on="submit lazy" @submit.prevent="auth">
+                    <h1 class="text-center text-2xl mb-4">Welcome Back!</h1>
+                    <v-text-field v-model="phoneNumber" :rules="phoneNumberRules" type="text" label="Phone Number"/>
 
-            <Input name="phoneNumber" :formVar="phoneNumber" type="text" label="Phone Number"  @input="(event)=>validatePhoneNumber(event)" required/>
+                    <v-text-field v-model="password" :rules="passwordRules" type="password" label="Password"/>
 
-            <Input name="password" :formVar="password" type="password" label="Password" required/>
-
-            <RouterLink to="/sign-up" class="text-blue-700 underline">Don't have an account?</RouterLink>
-            <v-btn class="border border-black">Sign in</v-btn>
-        </form>
-    </div>
+                    <RouterLink to="/sign-up" class="text-blue-700 underline block">Don't have an account?</RouterLink>
+                    <br>
+                    <v-btn type="submit" color="primary" block>Sign in</v-btn>
+                </v-form>
+            </v-card>
+        </v-sheet>
 </template>
 <script setup>
-    import { reactive } from 'vue';
-    import Input from '@/components/UI/Input.vue';
-    const phoneNumber = reactive({value:"", error:""})
-    const password = reactive({value:"", error:""})
+    import { ref} from 'vue';
+    import { phoneNumberRules, passwordRules } from '@/utils/validation/rules';
+    const phoneNumber = ref('')
+    const password = ref('')
 
     const auth = async ()=>{
         await checkForErrors()
@@ -50,15 +52,6 @@
     const resetErrors = ()=>{
         phoneNumber.error = ""
         password.error = ""
-    }
-
-    const validatePhoneNumber = (event)=>{
-        phoneNumber.value = event.target.value.replace(/\D+/g, '')
-        phoneNumber.value=phoneNumber.value.slice(0,12);
-    }
-
-    const clearError = (formVar)=>{
-        formVar.error = ""
     }
 </script>
 <style>
