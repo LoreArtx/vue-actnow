@@ -5,7 +5,6 @@
                         <RouterLink :to="'/request-for-volunteering/'+request._id">
                             <h2 class="text-lg mb-2 hover:underline">{{request.title}}</h2>
                             <Tag :category="request.category"/>
-                            <!-- <div class="mt-4">{{request.needs[0].title}}</div> -->
                         </RouterLink>
                     </InfoWindow>
         </AdvancedMarker>
@@ -32,7 +31,7 @@
 
 <style>
     .customMarker{
-        @apply  size-6 rounded cursor-pointer border-4 border-white
+        @apply  size-4 rounded cursor-pointer bg-white border-4
     }
     
 </style>
