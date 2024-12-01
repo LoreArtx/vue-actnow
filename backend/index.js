@@ -4,11 +4,15 @@ import mongodb, { ObjectId } from "mongodb"
 import cors from "cors"
 import bcrypt from "bcrypt"
 import multer from "multer"
+import twilio from "twilio"
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 dotenv.config();
+
+
+
 
 let db;
 
@@ -21,8 +25,48 @@ mongodb.MongoClient.connect(process.env.CONNECTION_STRING, { useUnifiedTopology:
     .catch(error => console.error("Database connection error:", error));
 
 
+// twilio
+const clientTwilio = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN)
+
+app.post('/api/actnow/sms-verify', async (request, response) =>{
+    try{
+        const {phoneNumber} = request.body
+        const verification = await clientTwilio.verify.v2
+        .services(process.env.VERIFY_SERVICE_SID)
+        .verifications.create({
+        channel: "sms",
+        to: phoneNumber,
+        });
+
+        if(verification.status === 'pending')
+            return response.status(200).json({status:verification.status})
+        
+        return response.status(404).json({error:'Unknown Error'})
+    }catch(error){
+        console.log(error)
+        return response.status(500).json({meerrorssage:'Internal Server Error'})
+    }
+})
+
+app.post('/api/actnow/code-check', async(request, response)=>{
+    try{
+        const {code, phoneNumber} = request.body
+
+        const verificationCheck = await clientTwilio.verify.v2.services(process.env.VERIFY_SERVICE_SID).verificationChecks.create({code,to:phoneNumber})
+
+        if(verificationCheck.status === 'approved')
+            return response.status(200).json({status:verificationCheck.status})
+
+        return response.status(404).json({error:"Invalid code"})
+    }catch(error){
+        console.log(error)
+        return response.status(500).json({error:'Internal Server Error'})
+    }
+})
+
+
 // USER
-    app.post("/api/medhelp/sign-in", async (request, response) => {
+app.post("/api/actnow/sign-in", async (request, response) => {
     try {
         const { phoneNumber, password } = request.body;
 
@@ -54,7 +98,7 @@ mongodb.MongoClient.connect(process.env.CONNECTION_STRING, { useUnifiedTopology:
 
 });
 
-    app.post("/api/medhelp/sign-up", async (request, response) =>{
+app.post("/api/actnow/sign-up", async (request, response) =>{
         try {
             const {firstName, lastName, phoneNumber, password } = request.body
 
@@ -79,7 +123,7 @@ mongodb.MongoClient.connect(process.env.CONNECTION_STRING, { useUnifiedTopology:
         }
 })
 
-    app.get("/api/medhelp/checkNumber", async (request, response) =>{
+app.get("/api/actnow/checkNumber", async (request, response) =>{
     try {
         const phoneNumber = request.query.phoneNumber
 
@@ -97,7 +141,7 @@ mongodb.MongoClient.connect(process.env.CONNECTION_STRING, { useUnifiedTopology:
 
 
 // Needs
-    app.get("/api/medhelp/requests", async(request, response)=>{
+app.get("/api/actnow/requests", async(request, response)=>{
     try {
         const needs = await db.collection("requests").find({}).toArray();
         return response.status(200).json(needs);
@@ -106,7 +150,7 @@ mongodb.MongoClient.connect(process.env.CONNECTION_STRING, { useUnifiedTopology:
     }
 })
 
-    app.get("/api/medhelp/requests/:id", async(request, response)=>{
+    app.get("/api/actnow/requests/:id", async(request, response)=>{
         const id = request.params.id
         try{
             const need = await db.collection("requests").findOne({_id:new ObjectId(id)})
