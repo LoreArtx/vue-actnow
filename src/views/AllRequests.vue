@@ -4,9 +4,24 @@
         @filterByAuthor="filterByAuthor"
         @filterByNeedTitle="filterByNeedTitle"
         @filterByCategory="filterByCategory"/>
-        <RouterLink v-for="request in filteredRequests" :to="`/request-for-volunteering/${request._id}`" class="underline text-blue-500 mb-5 block">
-            {{ request.title }} --- {{ request.author }}
-        </RouterLink>
+        
+        <v-container class="flex flex-wrap gap-5">
+            <v-card 
+            v-for="request in filteredRequests"
+            :href="`/request-for-volunteering/${request._id}`"
+            :subtitle="request.author"
+            class="min-w-[300px] flex-1"
+            width="300">
+                <template v-slot:title>
+                    {{ request.title }}
+                </template>
+
+                <v-card-text component="ul" class="bg-surface-light pt-4 h-full flex flex-col">
+                    <span v-for="need in request.needs">{{ need.title }}</span>
+                </v-card-text>
+            </v-card>
+        </v-container>
+
         <div v-if="filteredRequests.length === 0">No results</div>
     </div>
 </template>
