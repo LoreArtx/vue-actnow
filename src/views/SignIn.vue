@@ -1,8 +1,8 @@
 <template>
         <v-sheet class="pa-12">
             <v-card class="mx-auto px-6 py-8 flex" max-width="344">
+                <h1 class="text-center text-2xl mb-4">Welcome Back!</h1>
                 <v-form validate-on="submit lazy" @submit.prevent="auth">
-                    <h1 class="text-center text-2xl mb-4">Welcome Back!</h1>
                     <v-text-field v-model="phoneNumber" :rules="[rules.required]" type="text" label="Phone Number"/>
 
                     <v-text-field v-model="password" :rules="[rules.required]" type="password" label="Password"/>
@@ -21,7 +21,7 @@
     const password = ref('')
 
     const auth = async ()=>{
-        const response = await fetch("http://localhost:5555/api/medhelp/sign-in", {
+        const response = await fetch("http://localhost:5555/api/actnow/sign-in", {
             method:"POST",
             headers: {
                 'Accept': 'application/json',

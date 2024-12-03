@@ -1,21 +1,33 @@
 <template>
     <v-sheet class="pa-8">
         <v-card class="mx-auto px-6 py-8 flex" max-width="344">
+            <h1 class="text-center mb-8 text-2xl">
+               Welcome 
+            </h1>
             <v-form @submit.prevent="signUp" validate-on="submit lazy">
-                <h1 class="text-center text-2xl mb-2">Welcome</h1>
-                <v-text-field v-model="firstName" :rules="[rules.required]" label="First Name"/>
+                <v-row class="gap-4">
+                    <v-text-field v-model="firstName" :rules="[rules.required]" label="First Name"/>
 
-                <v-text-field v-model="lastName" :rules="[rules.required]" label="Last Name"/>
+                    <v-text-field v-model="lastName" :rules="[rules.required]" label="Last Name"/>
+                </v-row>
 
-                <v-text-field v-model="phoneNumber" :rules="[rules.required]" label="Phone Number"/> 
+                <v-row>
+                    <v-text-field v-model="phoneNumber" :rules="[rules.required]" label="Phone Number"/> 
+                </v-row>
 
-                <v-text-field v-model="password" :rules="[rules.required]" type="password" label="Password"/>
+                <v-row>
+                    <v-text-field v-model="password" :rules="[rules.required]" type="password" label="Password"/>
+                </v-row>
 
-                <v-text-field v-model="confirmPassword" :rules="[rules.required]" type="password" label="Confirm Password"/>
+                <v-row>
+                    <v-text-field v-model="confirmPassword" :rules="[rules.required]" type="password" label="Confirm Password"/>
+                </v-row>
 
                 <RouterLink to="/sign-in" class="text-blue-700 underline block">Already have an account</RouterLink>
                 <br>
-                <v-btn type="submit" color="primary" block>Sign up</v-btn>
+                <v-row>
+                    <v-btn type="submit" color="primary" block>Sign up</v-btn>
+                </v-row>
             </v-form>
         </v-card>
     </v-sheet>
@@ -31,9 +43,7 @@
     const confirmPassword = ref('')
 
     const signUp = async ()=>{
-
-        console.log(12)
-        const response = await fetch("http://localhost:5555/api/medhelp/sign-up",
+        const response = await fetch("http://localhost:5555/api/actnow/sign-up",
             {
                 method:"POST",
                 headers:{
