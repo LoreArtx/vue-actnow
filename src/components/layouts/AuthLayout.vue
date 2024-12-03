@@ -1,10 +1,10 @@
 <template>
-    <NavbarAuth/>
+    <NavbarLogin/>
     <slot/>
 </template>
 
 <script setup>
-    import NavbarAuth from '@/components/UI/Navbar/NavbarAuth.vue';
+    import NavbarLogin from '@/components/UI/Navbar/NavbarLogin.vue';
 </script>
 
 <style lang="scss" scoped>
