@@ -1,10 +1,12 @@
 <template>
-    <div class="flex justify-between gap-5">
-        <div class="bg-gray-200 w-3/4">
-            <Map :center="{lat:49.0384, lng:31.4513}" :zoom="6"/>
-        </div>
-        <RequestsAside/>
-    </div>
+    <v-row class="flex gap-5">
+        <v-col cols="8">
+            <Map class="min-w-[500px]" :center="{lat:49.0384, lng:31.4513}" :zoom="6"/>
+        </v-col>
+        <v-col>
+            <RequestsAside/>
+        </v-col>
+    </v-row>
 </template>
 <script setup>
     import RequestsAside from '@/components/RequestsAside.vue';
