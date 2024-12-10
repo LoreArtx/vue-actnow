@@ -63,7 +63,7 @@
             </v-row>
 
             <v-row>
-              <v-btn type="submit" variant="elevated" color="primary" block>Надіслати</v-btn>
+              <v-btn type="submit" variant="elevated" color="primary" block>Submit</v-btn>
             </v-row>
           </v-form>
         </v-card-text>

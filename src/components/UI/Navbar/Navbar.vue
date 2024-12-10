@@ -1,8 +1,17 @@
 <script setup>
-    const routes = [
+    import { isAuth } from '@/plugins/auth';
+    let routes = [
+        {path:'create-request', title:'Create Own Request'},
+        {path:'why-trust-us', title:'Why Trust Us'},
         {path:'about', title:'About'},
-        {path:'sign-in', title:'Sign In'}
-        ]
+    ]
+
+    if(isAuth.value){
+        routes.push({path:'profile', title:'Profile'})
+    }else{
+        routes.push({path:'sign-in', title:'Sign in'})
+    }
+
 </script>
 
 <template >

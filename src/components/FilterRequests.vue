@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-    import { watch, ref } from 'vue';
+    import { ref } from 'vue';
     import useRequests from '@/stores/volunteer-requests';
     const organisationName = ref('')
     const needTitle = ref('')

@@ -16,7 +16,7 @@
                     {{ request.title }}
                 </template>
 
-                <v-card-text component="ul" class="bg-surface-light pt-4 h-full flex flex-col">
+                <v-card-text component="ul" :class="`${request.category}-card text-white pt-4 h-full flex flex-col`">
                     <span v-for="need in request.needs">{{ need.title }}</span>
                 </v-card-text>
             </v-card>
@@ -102,6 +102,24 @@
     });
 </script>
 
-<style scoped>
+<style>
+.military-card{
+    @apply bg-red-500 rounded
+}
 
+.medical-card{
+    @apply bg-green-500 rounded
+}
+
+.vehicle-card{
+    @apply bg-gray-500 rounded
+}
+
+.energy-card{
+    @apply bg-blue-500 rounded
+}
+
+.other-card{
+    @apply bg-purple-500 rounded
+}
 </style>
