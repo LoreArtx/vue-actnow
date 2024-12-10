@@ -20,7 +20,12 @@ import useRequests from './stores/volunteer-requests'
 
 import App from './App.vue'
 import router from './router'
+import { initAuth } from './plugins/auth'
 const app = createApp(App)
+
+initAuth()
+
+
 const vuetify = createVuetify({
     components,
      directives,
@@ -38,6 +43,9 @@ const vuetify = createVuetify({
 })
 app.use(createPinia())
 app.use(vuetify)
+
+
+
 const requestsStore = useRequests()
 await requestsStore.initRequests()
 

@@ -8,10 +8,16 @@ const routes = [
       component: ()=> import('@/views/Home.vue'),
       meta:{layout:DefaultLayout}
     },
-        {
+    {
       path: '/about',
       name: 'about',
       component: ()=>import('@/views/About.vue'),
+      meta:{layout:DefaultLayout}
+    },
+    {
+      path: '/why-trust-us',
+      name: 'why-trust-us',
+      component: ()=>import('@/views/WhyTrustUs.vue'),
       meta:{layout:DefaultLayout}
     },
     {
@@ -37,6 +43,7 @@ const routes = [
       name:'request-for-volunteering',
       component:()=>import('@/views/VolunteerRequest.vue'),
       meta:{layout:DefaultLayout}
-    }]
+    }
+  ]
 
 export default routes

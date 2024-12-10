@@ -42,7 +42,7 @@
         if(data.token)
         {
             setToken(data.token)
-            router.push("/")
+            router.go(-1)
         }else{
             alert(data.error)
         }

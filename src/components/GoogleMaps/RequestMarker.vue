@@ -1,7 +1,7 @@
 <template>
     <div class="relative">
         <AdvancedMarker :options="{position:request.location.coordinates, content: getCustomMarker()}" @click="handleToggle">
-                    <InfoWindow class="h-[75px]">
+                    <InfoWindow v-if="request.title" class="h-[75px]">
                         <RouterLink :to="'/request-for-volunteering/'+request._id">
                             <h2 class="text-lg mb-2 hover:underline">{{request.title}}</h2>
                             <Tag :category="request.category"/>
