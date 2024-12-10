@@ -54,7 +54,14 @@
             }
         )
 
-        console.log(response)
+        const data = await response.json()       
+        if(data.token)
+        {
+            setToken(data.token)
+            router.push("/")
+        }else{
+            alert(data.error)
+        }
     }
 
 </script>

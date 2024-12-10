@@ -16,7 +16,12 @@
 </template>
 <script setup>
     import { ref} from 'vue';
+    import { setToken } from '@/plugins/auth';
+    import { useRouter } from 'vue-router';
     import rules from '@/utils/validation/rules';
+    
+    const router = useRouter()
+    
     const phoneNumber = ref('')
     const password = ref('')
 
@@ -27,10 +32,20 @@
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
+            credentials:'include',
             body:JSON.stringify({
             phoneNumber:phoneNumber.value, password:password.value
         })})
-        console.log(response)
+        
+        const data = await response.json()
+        
+        if(data.token)
+        {
+            setToken(data.token)
+            router.push("/")
+        }else{
+            alert(data.error)
+        }
     }
 </script>
 <style>
