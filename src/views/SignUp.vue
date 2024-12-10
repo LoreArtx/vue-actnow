@@ -36,6 +36,11 @@
 <script setup>
     import {ref} from "vue"
     import rules from "@/utils/validation/rules";
+    import { setToken } from "@/plugins/auth";
+    import { useRouter } from "vue-router";
+
+    const router = useRouter();
+    
     const firstName = ref('')
     const lastName = ref('')
     const phoneNumber = ref('')
@@ -58,7 +63,7 @@
         if(data.token)
         {
             setToken(data.token)
-            router.go(-1)
+            router.push("/")
         }else{
             alert(data.error)
         }

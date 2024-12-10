@@ -59,7 +59,7 @@
             </v-col>
             </v-row>
 
-            <v-row class="flex-auto items-end">
+            <v-row v-if="!$route.meta.request.closed" class="flex-auto items-end">
                 <v-col>
                     <v-btn color="primary" block @click="paymentDialog=true">Donate</v-btn>
                 </v-col>

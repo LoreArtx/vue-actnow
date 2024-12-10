@@ -2,7 +2,7 @@ import { fetchData } from "@/utils/api";
 import { defineStore } from "pinia";
 
 const useRequests = defineStore('requests',{
-    state:()=>({requests:[]}),
+    state:()=>({requests:[], fetchInterval: null}),
     actions:{
         async fetchRequests(){
             if(this.requests.length > 0) return
@@ -33,7 +33,22 @@ const useRequests = defineStore('requests',{
         getRequestsByCategory(category){
             let requests = this.requests.filter(r=>r.category === category)
             return requests
-        }
+        },
+        
+        // startFetchingRequests() {
+        //     if (!this.fetchInterval) {
+        //         this.fetchInterval = setInterval(async() => {
+        //             console.log("refetch")
+        //             await this.fetchRequests();
+        //         }, 5000);
+        //     }
+        // },
+        // stopFetchingRequests() {
+        //     if (this.fetchInterval) {
+        //         clearInterval(this.fetchInterval);
+        //         this.fetchInterval = null;
+        //     }
+        // }
     }
 })
 

@@ -121,8 +121,10 @@ import Map from '@/components/GoogleMaps/Map.vue';
 import { useRouter } from 'vue-router';
 import { userToken } from '@/plugins/auth';
 import { jwtDecode } from "jwt-decode";
+import useRequests from '@/stores/volunteer-requests';
 
 const router = useRouter()
+const {fetchRequests} = useRequests()
 
 
 const newRequest = reactive({
@@ -130,6 +132,7 @@ const newRequest = reactive({
   category: '',
   description: '',
   goal: 0,
+  collected: 0,
   needs: [],
   author:`${jwtDecode(userToken.value).user.first_name} ${jwtDecode(userToken.value).user.last_name}`,
   location: {
@@ -199,6 +202,7 @@ async function handleSubmit() {
     if(response.ok)
     {
         router.push("/")
+        await fetchRequests()
     }
 }
 
