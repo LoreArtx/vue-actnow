@@ -5,7 +5,7 @@ import cors from "cors"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import twilio from "twilio"
-import authenticateToken from "./middleware/authenticateToken.js"
+// import authenticateToken from "./middleware/authenticateToken.js"
 
 
 const app = express();
@@ -203,6 +203,47 @@ app.post("/api/actnow/requests", async(request, response)=>{
         return response.status(500).json({message:"Internal Server Error"})
     }
 })
+
+app.patch("/api/actnow/requests/:id", async (request, response) => {
+    try {
+        const { id } = request.params;
+        const updates = request.body;
+
+        if (!id) {
+            return response.status(400).json({ message: "Request ID is required" });
+        }
+
+        if (!ObjectId.isValid(id)) {
+            return response.status(400).json({ message: "Invalid request ID" });
+        }
+
+        const updateFields = {};
+        for (const key in updates) {
+            if (updates[key] !== undefined && updates[key] !== null) {
+                updateFields[key] = updates[key];
+            }
+        }
+
+        if (Object.keys(updateFields).length === 0) {
+            return response.status(400).json({ message: "No valid fields to update" });
+        }
+
+        const result = await db.collection("requests").updateOne(
+            { _id: new ObjectId(id) },
+            { $set: updateFields }
+        );
+
+        if (result.matchedCount === 0) {
+            return response.status(404).json({ message: "Request not found" });
+        }
+
+        return response.status(200).json({ message: "Request updated successfully" });
+    } catch (error) {
+        console.error(error);
+        return response.status(500).json({ message: "Internal Server Error" });
+    }
+});
+
 
 const PORT = 5555;
 app.listen(PORT, () => {
