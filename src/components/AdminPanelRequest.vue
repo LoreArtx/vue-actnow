@@ -9,6 +9,7 @@
 </template>
 
 <script setup>
+import { fetchData } from '@/utils/api';
 import { RouterLink } from 'vue-router';
 import { useRouter,useRoute } from 'vue-router';
 
@@ -17,12 +18,8 @@ const route = useRoute()
 
 const handleToggleClosedRequest = async () => {
   try {
-    const response = await fetch(`http://localhost:5555/api/actnow/requests/${route.meta.request._id}`, {
+    const response = await fetchData(`http://localhost:5555/api/actnow/requests/${route.meta.request._id}`, {
       method: "PATCH",
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
       body: JSON.stringify({ closed: !route.meta.request.closed })
     });
 

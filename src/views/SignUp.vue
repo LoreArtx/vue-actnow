@@ -38,6 +38,7 @@
     import rules from "@/utils/validation/rules";
     import { setToken } from "@/plugins/auth";
     import { useRouter } from "vue-router";
+import { fetchData } from "@/utils/api";
 
     const router = useRouter();
     
@@ -48,13 +49,9 @@
     const confirmPassword = ref('')
 
     const signUp = async ()=>{
-        const response = await fetch("http://localhost:5555/api/actnow/sign-up",
+        const response = await fetchData("http://localhost:5555/api/actnow/sign-up",
             {
                 method:"POST",
-                headers:{
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
                 body:JSON.stringify({firstName:firstName.value,lastName:lastName.value,phoneNumber:phoneNumber.value,password:password.value})
             }
         )

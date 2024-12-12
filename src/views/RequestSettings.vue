@@ -119,6 +119,7 @@ import rules from '@/utils/validation/rules';
 import { reactive } from 'vue';
 import Map from '@/components/GoogleMaps/Map.vue';
 import { useRouter, useRoute } from 'vue-router';
+import { fetchData } from '@/utils/api';
 
   const router = useRouter()
   const route = useRoute()
@@ -185,12 +186,8 @@ async function handleSubmit() {
 
     console.log(newRequest)
 
-    const response = await fetch("http://localhost:5555/api/actnow/requests/"+route.meta.request._id,{
+    const response = await fetchData("http://localhost:5555/api/actnow/requests/"+route.meta.request._id,{
         method:"PATCH",
-        headers:{
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
         body:JSON.stringify(newRequest)
     })
 
