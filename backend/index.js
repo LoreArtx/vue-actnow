@@ -170,6 +170,8 @@ app.patch("/api/user/:id", async (request, response) => {
         const { id } = request.params;
         const updates = request.body;
 
+        // const token = request.headers.authorization?.split(" ")[1];
+
         if (!id) {
             return response.status(400).json({ message: "User ID is required" });
         }
@@ -231,6 +233,8 @@ app.delete("/api/user/:id", async (request, response) => {
             return response.status(400).json({ message: "User ID is required" });
         }
 
+        // const token = request.headers.authorization?.split(" ")[1];
+
         if (!ObjectId.isValid(id)) {
             return response.status(400).json({ message: "Invalid User ID" });
         }
@@ -278,7 +282,15 @@ app.get("/api/requests/:id", async(request, response)=>{
 
 app.post("/api/requests", async(request, response)=>{
     try{
+
         const {title,needs,goal,category,description, author, location, collected} = request.body
+
+        const existingRequest = await db.collection("requests").findOne({ author });
+
+        if (existingRequest) {
+            return response.status(400).json({ message: "This organization already has an existing request." });
+        }
+
         const newRequest = {
             title,
             needs,
@@ -302,6 +314,8 @@ app.patch("/api/requests/:id", async (request, response) => {
     try {
         const { id } = request.params;
         const updates = request.body;
+
+        // const token = request.headers.authorization?.split(" ")[1];
 
         if (!id) {
             return response.status(400).json({ message: "Request ID is required" });
@@ -341,6 +355,8 @@ app.patch("/api/requests/:id", async (request, response) => {
 app.delete("/api/requests/:id", async (request, response) => {
     try {
         const { id } = request.params;
+
+        // const token = request.headers.authorization?.split(" ")[1];
 
         if (!id) {
             return response.status(400).json({ message: "Request ID is required" });
