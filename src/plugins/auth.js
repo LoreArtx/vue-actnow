@@ -1,7 +1,7 @@
 import { ref } from "vue";
 
 export const isAuth = ref(false)
-export const userToken = ref(null)
+export const userToken = ref(localStorage.getItem('auth')||null)
 
 export function setToken(token){
     localStorage.setItem('auth', token)
@@ -23,8 +23,5 @@ export function initAuth(){
     {
         isAuth.value = true
         userToken.value = token
-    }else{
-        isAuth.value = false
-        userToken.value = null
     }
 }
