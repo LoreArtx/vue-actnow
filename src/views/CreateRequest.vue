@@ -172,7 +172,11 @@ async function handleSubmit() {
             ...newRequest, goal:Number(newRequest.goal)
         })
     })
-
+    if(data.message === "This organization already has an existing request.")
+    {
+        alert(data.message)
+        return
+    }
 
     if(data.message)
     {

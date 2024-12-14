@@ -12,7 +12,8 @@
             <v-col cols="12" md="8">
               <h1 class="text-h4 font-weight-bold">{{ user.first_name }} {{ user.last_name }}</h1>
               <p class="text-body-1">{{ user.description || "No description provided." }}</p>
-              <v-btn color="primary" class="mt-2" @click="handleEditProfile">Edit Profile</v-btn>
+              <v-btn color="primary" class="mt-2 mr-2" @click="handleEditProfile">Edit Profile</v-btn>
+              <v-btn @click="deleteUser" class="mt-2" color="error" large> Delete user </v-btn>
             </v-col>
           </v-row>
         </v-card>
@@ -47,6 +48,12 @@
     </v-row>
 
     <v-row class="mt-6">
+      <v-col v-if="user.role === 'user'" cols="12">
+        <v-btn @click="router.push('/become-volunteer')" color="warning" large block>
+          Become a volunteer
+        </v-btn>
+      </v-col>
+
       <v-col cols="12">
         <v-btn @click="handleSignOut" color="error" large block>
           Sign out
@@ -62,6 +69,7 @@ import { useRouter } from 'vue-router';
 import { reactive } from 'vue';
 import { userToken } from '@/plugins/auth';
 import { jwtDecode } from 'jwt-decode';
+import { fetchData } from '@/utils/api';
 
 const router = useRouter();
 
@@ -73,7 +81,26 @@ function handleSignOut() {
 }
 
 function handleEditProfile() {
-  // Implement profile editing logic here
   alert("Edit profile functionality coming soon!");
+}
+
+
+async function deleteUser() {
+    try {
+        const response = await fetchData(`user/${user._id}`, {
+            method: "DELETE",
+        });
+
+        if (response.message === "User deleted successfully") {
+            alert("User was successfully deleted.");
+            window.location.reload();
+            clearAuth();
+        } else {
+            alert("Failed to delete user. Please try again.");
+        }
+    } catch (error) {
+        console.error("Error deleting user:", error);
+        alert("An error occurred while deleting the user.");
+    }
 }
 </script>
