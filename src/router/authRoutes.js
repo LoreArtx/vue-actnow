@@ -8,17 +8,11 @@ const authRoutes = [
       meta:{layout:DefaultLayout}
     },
     {
-      path: '/create-request',
-      name: 'create-request',
-      component: ()=>import('@/views/CreateRequest.vue'),
+      path:'/become-volunteer',
+      name:'become-volunteer',
+      component: ()=>import('@/views/BecomeVolenteer.vue'),
       meta:{layout:DefaultLayout}
     },
-    {
-      path:'/request-for-volunteering/:id/settings',
-      name:'request-for-voluenteering-settings',
-      component:()=>import('@/views/RequestSettings.vue'),
-      meta:{layout:DefaultLayout}
-    }
 ]
 
 export default authRoutes
