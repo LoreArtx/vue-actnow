@@ -24,9 +24,6 @@ router.beforeEach(async (to, from, next) => {
     const requestId = to.params.id;
     try {
       const request = await getRequestById(requestId) 
-
-      console.log(request)
-
       if (!request) {
         return next({ name: 'home' });
       }
@@ -43,7 +40,8 @@ router.beforeEach(async (to, from, next) => {
       try {
         const request = await getRequestById(requestId) 
 
-        if (!request || request.author !== jwtDecode(userToken.value).user.organization) {
+      if (jwtDecode(userToken.value).user.role !== 'admin' && (!request || request.author !== jwtDecode(userToken.value).user.organization)) {
+          console.log(jwtDecode(userToken.value).user.role !== 'admin')
           alert("You have no access to modify that request")
           return next({ name: 'home' });
         }

@@ -1,5 +1,6 @@
 <script setup>
-    import { isAuth } from '@/plugins/auth';
+    import { isAuth, userToken } from '@/plugins/auth';
+    import { jwtDecode } from 'jwt-decode';
     let routes = [
         {path:'create-request', title:'Create Own Request'},
         {path:'why-trust-us', title:'Why Trust Us'},
@@ -7,6 +8,9 @@
     ]
 
     if(isAuth.value){
+        if(jwtDecode(userToken.value).user.role === 'admin')
+            routes.push({path:'dashboard', title:'Dashboard'})
+        
         routes.push({path:'profile', title:'Profile'})
     }else{
         routes.push({path:'sign-in', title:'Sign in'})

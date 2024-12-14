@@ -70,7 +70,7 @@
         </v-container>
         </v-col>
 
-        <v-col v-if="user.role === 'admin' || user.organization === route.meta.request.author">
+        <v-col v-if="user && (user.role === 'admin' || user.organization === route.meta.request.author)">
             <AdminPanelRequest/>
         </v-col>
 
@@ -98,7 +98,7 @@
     import { userToken } from '@/plugins/auth';
     import { jwtDecode } from 'jwt-decode';
 
-    const user = jwtDecode(userToken.value).user
+    const user = userToken.value && jwtDecode(userToken.value).user
 
     const paymentDialog = ref(false)
     const verificationDialog = ref(false)

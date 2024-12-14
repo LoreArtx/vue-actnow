@@ -165,6 +165,27 @@ app.get("/api/checkNumber", async (request, response) =>{
     }
 })
 
+app.get("/api/users", async (request, response) => {
+    try {
+        const users = await db.collection("users").find().toArray();
+
+        if (!users || users.length === 0) {
+            return response.status(404).json({ error: "No users found" });
+        }
+
+        const usersWithNoPasswords = users.map(u=>{
+            const {password, ...protectedUser} = u
+            return protectedUser
+        })
+
+        return response.status(200).json({users:usersWithNoPasswords});
+    } catch (error) {
+        console.error("Error fetching users:", error);
+        return response.status(500).json({ error: "Internal server error" });
+    }
+});
+
+
 app.patch("/api/user/:id", async (request, response) => {
     try {
         const { id } = request.params;

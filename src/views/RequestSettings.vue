@@ -183,16 +183,13 @@ async function handleSubmit() {
     }
 
     newRequest.goal = Number(newRequest.goal)
-    const response = await fetchData("requests/"+route.meta.request._id,{
+    await fetchData("requests/"+route.meta.request._id,{
         method:"PATCH",
         body:JSON.stringify(newRequest)
     })
 
 
-    if(response.ok)
-    {
-        router.go();
-    }
+    router.push(`/request-for-volunteering/${route.meta.request._id}`);
 }
 
 function handleGetLocation(e){
