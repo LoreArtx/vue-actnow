@@ -49,14 +49,13 @@ import { fetchData } from "@/utils/api";
     const confirmPassword = ref('')
 
     const signUp = async ()=>{
-        const response = await fetchData("http://localhost:5555/api/actnow/sign-up",
+        const data = await fetchData("sign-up",
             {
                 method:"POST",
                 body:JSON.stringify({firstName:firstName.value,lastName:lastName.value,phoneNumber:phoneNumber.value,password:password.value})
             }
         )
-
-        const data = await response.json()       
+        
         if(data.token)
         {
             setToken(data.token)

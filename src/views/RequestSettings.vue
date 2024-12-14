@@ -183,10 +183,7 @@ async function handleSubmit() {
     }
 
     newRequest.goal = Number(newRequest.goal)
-
-    console.log(newRequest)
-
-    const response = await fetchData("http://localhost:5555/api/actnow/requests/"+route.meta.request._id,{
+    const response = await fetchData("requests/"+route.meta.request._id,{
         method:"PATCH",
         body:JSON.stringify(newRequest)
     })

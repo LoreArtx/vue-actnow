@@ -30,7 +30,7 @@ mongodb.MongoClient.connect(process.env.CONNECTION_STRING, { useUnifiedTopology:
 // twilio
 const clientTwilio = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN)
 
-app.post('/api/actnow/sms-verify', async (request, response) =>{
+app.post('/api/sms-verify', async (request, response) =>{
     try{
         const {phoneNumber} = request.body
         const verification = await clientTwilio.verify.v2
@@ -50,7 +50,7 @@ app.post('/api/actnow/sms-verify', async (request, response) =>{
     }
 })
 
-app.post('/api/actnow/code-check', async(request, response)=>{
+app.post('/api/code-check', async(request, response)=>{
     try{
         const {code, phoneNumber} = request.body
 
@@ -68,7 +68,7 @@ app.post('/api/actnow/code-check', async(request, response)=>{
 
 
 // USER
-app.post("/api/actnow/sign-in", async (request, response) => {
+app.post("/api/sign-in", async (request, response) => {
     try {
         const { phoneNumber, password } = request.body;
 
@@ -103,7 +103,7 @@ app.post("/api/actnow/sign-in", async (request, response) => {
 
 });
 
-app.post("/api/actnow/sign-up", async (request, response) =>{
+app.post("/api/sign-up", async (request, response) =>{
         try {
             const {firstName, lastName, phoneNumber, password } = request.body
 
@@ -127,7 +127,15 @@ app.post("/api/actnow/sign-up", async (request, response) =>{
                 phone_number:phoneNumber,
                 password:hashedPassword,
                 role:"user",
-                description:""
+                description:"",
+                location:{
+                    streetName:"",
+                    coordinates:{
+                        lat:0,
+                        lng:0
+                    }
+                },
+                organization:""
             }
 
             await db.collection("users").insertOne(user)
@@ -142,7 +150,7 @@ app.post("/api/actnow/sign-up", async (request, response) =>{
         }
 })
 
-app.get("/api/actnow/checkNumber", async (request, response) =>{
+app.get("/api/checkNumber", async (request, response) =>{
     try {
         const phoneNumber = request.query.phoneNumber
 
@@ -157,35 +165,120 @@ app.get("/api/actnow/checkNumber", async (request, response) =>{
     }
 })
 
+app.patch("/api/user/:id", async (request, response) => {
+    try {
+        const { id } = request.params;
+        const updates = request.body;
+
+        if (!id) {
+            return response.status(400).json({ message: "User ID is required" });
+        }
+
+        if (!ObjectId.isValid(id)) {
+            return response.status(400).json({ message: "Invalid User ID" });
+        }
+
+        const updateFields = {};
+        for (const key in updates) {
+            if (updates[key] !== undefined && updates[key] !== null) {
+                updateFields[key] = updates[key];
+            }
+        }
+
+        if (Object.keys(updateFields).length === 0) {
+            return response.status(400).json({ message: "No valid fields to update" });
+        }
+
+        if (updateFields.organization) {
+            const organizationExists = await db.collection("users").findOne({
+                organization: updateFields.organization
+            });
+
+            if (organizationExists) {
+                return response.status(400).json({ 
+                    message: `Organization '${updateFields.organization}' already exists`
+                });
+            }
+        }
+
+        const result = await db.collection("users").updateOne(
+            { _id: new ObjectId(id) },
+            { $set: updateFields }
+        );
+
+
+        if (result.matchedCount === 0) {
+            return response.status(404).json({ message: "User not found" });
+        }
+
+        const updatedUser = await db.collection("users").findOne({ _id: new ObjectId(id) });
+        const {password, ...userNotSensibleData} = updatedUser
+        const token = jwt.sign({ user: userNotSensibleData }, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+
+        return response.status(200).json({ message: "User updated successfully", token });
+    } catch (error) {
+        console.error(error);
+        return response.status(500).json({ message: "Internal Server Error" });
+    }
+});
+
+app.delete("/api/user/:id", async (request, response) => {
+    try {
+        const { id } = request.params;
+
+        if (!id) {
+            return response.status(400).json({ message: "User ID is required" });
+        }
+
+        if (!ObjectId.isValid(id)) {
+            return response.status(400).json({ message: "Invalid User ID" });
+        }
+
+        const result = await db.collection("users").deleteOne({ _id: new ObjectId(id) });
+
+        if (result.deletedCount === 0) {
+            return response.status(404).json({ message: "User not found" });
+        }
+
+        return response.status(200).json({ message: "User deleted successfully" });
+    } catch (error) {
+        console.error(error);
+        return response.status(500).json({ message: "Internal Server Error" });
+    }
+});
+
+
+
 
 
 // Requests
-app.get("/api/actnow/requests", async(request, response)=>{
+app.get("/api/requests", async(request, response)=>{
     try {
-        const needs = await db.collection("requests").find({}).toArray();
-        return response.status(200).json(needs);
+        const requests = await db.collection("requests").find({}).toArray();
+        return response.status(200).json({requests});
     } catch (error) {
         return response.status(500).json({ message: "Internal Server Error" });
     }
 })
 
-app.get("/api/actnow/requests/:id", async(request, response)=>{
+app.get("/api/requests/:id", async(request, response)=>{
         const id = request.params.id
         try{
-            const need = await db.collection("requests").findOne({_id:new ObjectId(id)})
+            const request = await db.collection("requests").findOne({_id:new ObjectId(id)})
 
-            if(!need)
-                return response.status(404).json({message:"Need was not found"})
+            if(!request)
+                return response.status(404).json({message:"Request was not found"})
 
-            return response.status(200).json({need})
+            return response.status(200).json({request})
         }catch(error){
             return response.status(500).json({message:"Internal Server Error"})
         }
 })
 
-app.post("/api/actnow/requests", async(request, response)=>{
+app.post("/api/requests", async(request, response)=>{
     try{
-        const {title,needs,goal,category,description, author, location} = request.body
+        const {title,needs,goal,category,description, author, location, collected} = request.body
         const newRequest = {
             title,
             needs,
@@ -193,18 +286,19 @@ app.post("/api/actnow/requests", async(request, response)=>{
             category,
             description,
             author,
-            location
+            location,
+            collected
         }
 
-        await db.collection("requests").insertOne(newRequest)
+        const result = await db.collection("requests").insertOne(newRequest);
 
-        return response.status(200).json({message:"New request was successfully created"})
+        return response.status(200).json({message:"New request was successfully created", id:result.insertedId})
     }catch(error){
         return response.status(500).json({message:"Internal Server Error"})
     }
 })
 
-app.patch("/api/actnow/requests/:id", async (request, response) => {
+app.patch("/api/requests/:id", async (request, response) => {
     try {
         const { id } = request.params;
         const updates = request.body;
@@ -240,6 +334,31 @@ app.patch("/api/actnow/requests/:id", async (request, response) => {
         return response.status(200).json({ message: "Request updated successfully" });
     } catch (error) {
         console.error(error);
+        return response.status(500).json({ message: "Internal Server Error" });
+    }
+});
+
+app.delete("/api/requests/:id", async (request, response) => {
+    try {
+        const { id } = request.params;
+
+        if (!id) {
+            return response.status(400).json({ message: "Request ID is required" });
+        }
+
+        if (!ObjectId.isValid(id)) {
+            return response.status(400).json({ message: "Invalid request ID" });
+        }
+
+        const result = await db.collection("requests").deleteOne({ _id: new ObjectId(id) });
+
+        if (result.deletedCount === 0) {
+            return response.status(404).json({ message: "Request not found" });
+        }
+
+        return response.status(200).json({ message: "Request deleted successfully" });
+    } catch (error) {
+        console.error("Error deleting request:", error);
         return response.status(500).json({ message: "Internal Server Error" });
     }
 });

@@ -27,19 +27,17 @@ import { fetchData } from '@/utils/api';
     const password = ref('')
 
     const auth = async ()=>{
-        const response = await fetchData("http://localhost:5555/api/actnow/sign-in", {
+        const data = await fetchData("sign-in", {
             method:"POST",
             credentials:'include',
             body:JSON.stringify({
             phoneNumber:phoneNumber.value, password:password.value
         })})
-        
-        const data = await response.json()
-        
+                
         if(data.token)
         {
             setToken(data.token)
-            router.go(-1)
+            router.push("/")
         }else{
             alert(data.error)
         }

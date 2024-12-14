@@ -6,7 +6,9 @@ const useRequests = defineStore('requests',{
     actions:{
         async fetchRequests(){
             if(this.requests.length > 0) return
-                this.requests = await fetchData("http://localhost:5555/api/actnow/requests")
+                
+            const data = await fetchData("requests")
+            this.requests = data.requests
         },
         async initRequests(){
             await this.fetchRequests()
@@ -15,7 +17,8 @@ const useRequests = defineStore('requests',{
             let request = this.requests.find(r=>r._id === id)
 
             if(!request){
-                return await fetchData(`http://localhost:5555/api/actnow/requests/${id}`)
+                const data = await fetchData(`requests/${id}`)
+                return data.request
             }
 
             return request

@@ -1,6 +1,6 @@
 export async function fetchData(url, options = {}) {
   try {
-    const response = await fetch(url, {
+    const response = await fetch(`http://localhost:5555/api/${url}`, {
       ...options,
       headers: {
         "Accept": "application/json",
@@ -9,11 +9,14 @@ export async function fetchData(url, options = {}) {
       },
     });
 
+    const data = await response.json()
+
     if (!response.ok) {
-      throw new Error(`Error: ${response.status} --- ${response.statusText}`);
+      const errorMessage = data?.message || `Error: ${response.status} --- ${response.statusText}`;
+      throw new Error(errorMessage);
     }
 
-    return await response.json();
+    return data;
   } catch (error) {
     console.error(`Failed to fetch from ${url}:`, error);
     throw error;

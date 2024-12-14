@@ -96,16 +96,7 @@
                         </v-list>
                     </v-card>
                 </v-col>
-
-                <v-col class="relative">
-                    <Map class="min-w-[300px]" :center="{lat:49.0384, lng:31.4513}" :zoom="6" empty="true" @click="handleGetLocation" :show="newRequest"></Map>
-                    <div class="absolute -top-2">
-                        <span class="mr-4">Lat: {{ newRequest.location.coordinates.lat }}</span>
-                        <span>Lng: {{ newRequest.location.coordinates.lng }}</span>
-                    </div>
-                </v-col>
                 
-
                 <v-btn type="submit" block color="primary">
                     Apply changes
                 </v-btn>
@@ -117,15 +108,13 @@
 <script setup>
 import rules from '@/utils/validation/rules';
 import { reactive } from 'vue';
-import Map from '@/components/GoogleMaps/Map.vue';
 import { useRouter } from 'vue-router';
 import { userToken } from '@/plugins/auth';
 import { jwtDecode } from "jwt-decode";
-import useRequests from '@/stores/volunteer-requests';
+import { fetchData } from '@/utils/api';
 
 const router = useRouter()
-const {fetchRequests} = useRequests()
-
+const user = jwtDecode(userToken.value).user
 
 const newRequest = reactive({
   title: '',
@@ -134,14 +123,8 @@ const newRequest = reactive({
   goal: 0,
   collected: 0,
   needs: [],
-  author:`${jwtDecode(userToken.value).user.first_name} ${jwtDecode(userToken.value).user.last_name}`,
-  location: {
-    streetName: '',
-    coordinates: {
-      lat: 0,
-      lng: 0
-    }
-  }
+  location:user.location,
+  author:`${user.organization}`,
 })
 
 const newNeed = reactive({
@@ -182,33 +165,21 @@ async function handleSubmit() {
         alert("You can't create a request with no goal and needs")
         return
     }
-   
-    if(!newRequest.location.coordinates.lat && !newRequest.location.coordinates.lng)
-    {
-        alert("Choose the location")
-        return
-    }
 
-    const response = await fetch("http://localhost:5555/api/actnow/requests",{
+    const data = await fetchData("requests",{
         method:"POST",
-        headers:{
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body:JSON.stringify(newRequest)
+        body:JSON.stringify({
+            ...newRequest, goal:Number(newRequest.goal)
+        })
     })
 
 
-    if(response.ok)
+    if(data.message)
     {
-        router.push("/")
-        await fetchRequests()
+        alert(data.message)
+        router.push(`/request-for-volunteering/${data.id}`)
     }
 }
 
-function handleGetLocation(e){
-    newRequest.location.coordinates.lat = e.latLng.lat()
-    newRequest.location.coordinates.lng = e.latLng.lng()
 
-}
 </script>
