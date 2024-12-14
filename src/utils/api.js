@@ -19,6 +19,7 @@ export async function fetchData(url, options = {}) {
     return data;
   } catch (error) {
     console.error(`Failed to fetch from ${url}:`, error);
+    alert(error)
     throw error;
   }
 }

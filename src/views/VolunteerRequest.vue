@@ -13,7 +13,7 @@
             </v-row>
             <v-row><div>{{$route.meta.request.description}}</div></v-row>
             <v-row class="gap-4">
-                <v-col class="shadow p-4">
+                <v-col v-if="$route.meta.request.goal > 0" class="shadow p-4">
                     <div class="text-center">
                         <h2 class="text-lg font-semibold">Donate Goal</h2>
                         <div class="text-2xl font-bold text-primary">
@@ -36,7 +36,7 @@
                     </div>
                 </v-col>
 
-                            <v-col class="shadow p-4 rounded-lg">
+            <v-col v-if="$route.meta.request.needs.length > 0" class="shadow p-4 rounded-lg">
                 <div class="text-center text-lg font-semibold mb-4 text-primary">
                     We Require:
                 </div>
@@ -70,7 +70,7 @@
         </v-container>
         </v-col>
 
-        <v-col>
+        <v-col v-if="user.role === 'admin' || user.organization === route.meta.request.author">
             <AdminPanelRequest/>
         </v-col>
 
@@ -95,6 +95,10 @@
     import VerificationNumberForm from '@/components/VerificationNumberForm.vue';
     import {ref, computed} from 'vue'
     import { useRoute } from 'vue-router';
+    import { userToken } from '@/plugins/auth';
+    import { jwtDecode } from 'jwt-decode';
+
+    const user = jwtDecode(userToken.value).user
 
     const paymentDialog = ref(false)
     const verificationDialog = ref(false)

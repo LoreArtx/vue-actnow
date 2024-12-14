@@ -58,7 +58,7 @@ const user = jwtDecode(userToken.value).user;
 const router = useRouter();
 const organizationTitle = ref('');
 const verificationDialog = ref(false);
-const isVerified = ref(false); // Track if the user has been verified
+const isVerified = ref(false);
 const location = reactive({
     streetName: '',
     coordinates: {
