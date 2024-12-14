@@ -5,6 +5,8 @@
         </RouterLink>
         
         <v-list-item @click="handleToggleClosedRequest" :title="route.meta.request.closed ? 'Open the request':'Close the request'"></v-list-item>
+
+        <v-list-item @click="deleteRequest" title="Delete request"></v-list-item>
     </v-list>
 </template>
 
@@ -15,22 +17,38 @@ import { useRouter,useRoute } from 'vue-router';
 
 const router = useRouter()
 const route = useRoute()
-
-const handleToggleClosedRequest = async () => {
+async function handleToggleClosedRequest()  {
   try {
-    const response = await fetchData(`requests/${route.meta.request._id}`, {
+    const data = await fetchData(`requests/${route.meta.request._id}`, {
       method: "PATCH",
       body: JSON.stringify({ closed: !route.meta.request.closed })
     });
 
-    if (!response.ok) {
-      throw new Error(`Failed to update request: ${response.statusText}`);
-    }
+    alert(data.message)
 
-    router.push("/");
+    router.go();
   } catch (error) {
     console.error("Error closing request:", error);
   }
 };
+
+async function deleteRequest() {
+  if (!route.meta.request._id) {
+    throw new Error("Request ID is required");
+  }
+
+  try {
+    const data = await fetchData(`requests/${route.meta.request._id}`, {
+      method: "DELETE",
+    });
+
+    alert(data.message);
+    router.push("/")
+  } catch (error) {
+    console.error(`Failed to delete request ${route.meta.request._id}:`, error);
+    throw error;
+  }
+}
+
 
 </script>
