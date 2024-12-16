@@ -53,7 +53,7 @@ router.beforeEach(async (to, from, next) => {
     }
 
   }
-  else if(!isAuth.value && authRoutes.some(route => route.path === to.path))
+  else if(!isAuth.value && (authRoutes.some(route => route.path === to.path) || voluenteerRoutes.some(route => route.path === to.path)))
   {
     return next({name:'sign-in'})
   }

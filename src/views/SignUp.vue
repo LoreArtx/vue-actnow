@@ -6,21 +6,21 @@
             </h1>
             <v-form @submit.prevent="signUp" validate-on="submit lazy">
                 <v-row class="gap-4">
-                    <v-text-field v-model="firstName" :rules="[rules.required]" label="First Name"/>
+                    <v-text-field name="firstName" v-model="firstName" :rules="[rules.required]" label="First Name"/>
 
-                    <v-text-field v-model="lastName" :rules="[rules.required]" label="Last Name"/>
+                    <v-text-field name="lastName" v-model="lastName" :rules="[rules.required]" label="Last Name"/>
                 </v-row>
 
                 <v-row>
-                    <v-text-field v-model="phoneNumber" :rules="[rules.required]" label="Phone Number"/> 
+                    <v-text-field name="phoneNumber" v-model="phoneNumber" :rules="[rules.required]" label="Phone Number"/> 
                 </v-row>
 
                 <v-row>
-                    <v-text-field v-model="password" :rules="[rules.required]" type="password" label="Password"/>
+                    <v-text-field name="password" v-model="password" :rules="[rules.required]" type="password" label="Password"/>
                 </v-row>
 
                 <v-row>
-                    <v-text-field v-model="confirmPassword" :rules="[rules.required]" type="password" label="Confirm Password"/>
+                    <v-text-field name="confirmPassword" v-model="confirmPassword" :rules="[rules.required]" type="password" label="Confirm Password"/>
                 </v-row>
 
                 <RouterLink to="/sign-in" class="text-blue-700 underline block">Already have an account</RouterLink>

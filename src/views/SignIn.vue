@@ -3,9 +3,9 @@
             <v-card class="mx-auto px-6 py-8 flex" max-width="344">
                 <h1 class="text-center text-2xl mb-4">Welcome Back!</h1>
                 <v-form validate-on="submit lazy" @submit.prevent="auth">
-                    <v-text-field v-model="phoneNumber" :rules="[rules.required]" type="text" label="Phone Number"/>
+                    <v-text-field name="phoneNumber" v-model="phoneNumber" :rules="[rules.required]" type="text" label="Phone Number"/>
 
-                    <v-text-field v-model="password" :rules="[rules.required]" type="password" label="Password"/>
+                    <v-text-field name="password" v-model="password" :rules="[rules.required]" type="password" label="Password"/>
 
                     <RouterLink to="/sign-up" class="text-blue-700 underline block">Don't have an account?</RouterLink>
                     <br>

@@ -1,10 +1,10 @@
 <template>
     <div class="grid grid-cols-8 gap-3">
-        <v-text-field class="col-span-3" v-model="organisationName" @update:model-value="findByOrganisation" placeholder="Author / Organisation"></v-text-field>
+        <v-text-field name="organization" class="col-span-3" v-model="organisationName" @update:model-value="findByOrganisation" placeholder="Author / Organisation"></v-text-field>
 
-        <v-text-field class="col-span-3" v-model="needTitle" @update:model-value="findByNeedTitle" placeholder="Need"></v-text-field>
+        <v-text-field name="need" class="col-span-3" v-model="needTitle" @update:model-value="findByNeedTitle" placeholder="Need"></v-text-field>
 
-        <v-select class="col-span-2" :items="selectOptions" label="Category" v-model="categoryOption" @update:model-value="findByCategory"></v-select>
+        <v-select name="category" class="col-span-2" :items="selectOptions" label="Category" v-model="categoryOption" @update:model-value="findByCategory"></v-select>
     </div>
 </template>
 

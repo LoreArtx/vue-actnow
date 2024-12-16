@@ -6,6 +6,7 @@
 
                 <v-row>
                     <v-text-field
+                        name="name"
                         label="Your name"
                         v-model="form.name"
                         :rules="[rules.required]"
@@ -15,6 +16,7 @@
 
                 <v-row>
                     <v-text-field
+                        name="cardNumber"
                         label="Card Number"
                         v-model="form.cardNumber"
                         :rules="[rules.required, rules.cardNumber]"
@@ -25,6 +27,7 @@
 
                 <v-row class="gap-10">
                     <v-text-field
+                        name="exp"
                         label="Expiration Date (MM/YY)"
                         v-model="form.expirationDate"
                         :rules="[rules.required, rules.expirationDate]"
@@ -33,6 +36,7 @@
                     ></v-text-field>
 
                     <v-text-field
+                        name="cvv"
                         label="CVV"
                         v-model="form.cvv"
                         :rules="[rules.required, rules.cvv]"
@@ -44,6 +48,7 @@
 
                 <v-row>
                     <v-text-field
+                        name="amount"
                         label="Payment amount"
                         v-model="form.amount"
                         :rules="[rules.required, rules.amount]"
@@ -69,11 +74,11 @@ import { useRoute } from "vue-router";
 const route = useRoute();
 
 const form = ref({
-    cardNumber: "4114775288232231",
-    expirationDate: "12/12",
-    cvv: "123",
+    cardNumber: "",
+    expirationDate: "",
+    cvv: "",
     amount: "",
-    name: "Danylo",
+    name: "",
 });
 
 async function handleSubmit() {

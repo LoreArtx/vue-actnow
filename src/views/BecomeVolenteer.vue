@@ -5,6 +5,7 @@
             <v-row class="h-full">
                 <v-col class="relative">
                     <Map
+                        id="google-maps"
                         class="min-w-[300px]"
                         :center="{ lat: 49.0384, lng: 31.4513 }"
                         :zoom="6"
@@ -20,6 +21,7 @@
 
                 <v-col>
                     <v-text-field
+                        name="organization"
                         label="Organization name"
                         v-model="organizationTitle"
                         :rules="[rules.required]"

@@ -3,7 +3,8 @@
         <v-container class="mx-auto h-full">
             <v-row class="h-full">
                 <v-col class="h-full">
-                    <v-text-field 
+                    <v-text-field
+                        name="title" 
                         outlined
                         label="Title"
                         class="mb-4"
@@ -11,14 +12,16 @@
                         :rules="[rules.required]"
                     />
 
-                    <v-select 
+                    <v-select
+                        name="category" 
                         label="Category"
                         v-model="newRequest.category"
                         :items="['military', 'medical', 'vehicle', 'energy', 'other']"
                         :rules="[rules.required]"
                     />
 
-                    <v-textarea 
+                    <v-textarea
+                        name="description" 
                         outlined
                         label="Description"
                         v-model="newRequest.description"
@@ -28,7 +31,8 @@
                     />
 
                     <div>
-                        <v-text-field 
+                        <v-text-field
+                            name="donateGoal" 
                             outlined
                             label="Donate Goal"
                             type="number"
