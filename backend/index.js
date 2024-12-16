@@ -43,7 +43,7 @@ app.post('/api/sms-verify', async (request, response) =>{
         if(verification.status === 'pending')
             return response.status(200).json({status:verification.status})
         
-        return response.status(404).json({error:'Unknown Error'})
+        return response.status(404).json({message:'Unknown Error'})
     }catch(error){
         console.log(error)
         return response.status(500).json({meerrorssage:'Internal Server Error'})
@@ -59,10 +59,10 @@ app.post('/api/code-check', async(request, response)=>{
         if(verificationCheck.status === 'approved')
             return response.status(200).json({status:verificationCheck.status})
 
-        return response.status(404).json({error:"Invalid code"})
+        return response.status(404).json({message:"Invalid code"})
     }catch(error){
         console.log(error)
-        return response.status(500).json({error:'Internal Server Error'})
+        return response.status(500).json({message:'Internal Server Error'})
     }
 })
 
@@ -93,7 +93,7 @@ app.post("/api/sign-in", async (request, response) => {
             return response.status(200).json({token})
         }
 
-        return response.status(401).json({error: "Invalid credentials"})
+        return response.status(401).json({message: "Invalid credentials"})
 
 
     } catch (error) {
@@ -108,7 +108,7 @@ app.post("/api/sign-up", async (request, response) =>{
             const {firstName, lastName, phoneNumber, password } = request.body
 
             if(!firstName, !lastName, !phoneNumber, !password){
-                return response.status(400).json({error:"Nothing can be empty"})
+                return response.status(400).json({message:"Nothing can be empty"})
             }
 
             const isExists = await db.collection("users").findOne({
@@ -116,7 +116,7 @@ app.post("/api/sign-up", async (request, response) =>{
             })
 
             if(isExists){
-                return response.status(400).json({error:"User with such phone number already exists"})
+                return response.status(400).json({message:"User with such phone number already exists"})
             }
            
             const hashedPassword = await bcrypt.hash(password, parseInt(process.env.SALT_ROUNDS)) 
